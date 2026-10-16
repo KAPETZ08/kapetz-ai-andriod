@@ -1,8 +1,10 @@
+
 name: Build KAPETZ AI Android APK
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -24,8 +26,6 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v4
-        with:
-          packages: 'platform-tools'
 
       - name: Install Android SDK packages
         run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
@@ -34,8 +34,12 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-   - name: Validate AndroidManifest XML
-     run: python3 -c "import xml.etree.ElementTree as ET; ET.parse('app/src/main/AndroidManifest.xml'); print('AndroidManifest.xml is valid')"
+
+      - name: Validate AndroidManifest XML
+        run: python3 -c "import xml.etree.ElementTree as ET; ET.parse('app/src/main/AndroidManifest.xml'); print('AndroidManifest.xml is valid')"
+
+      - name: Build debug APK
+        run: gradle :app:assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
@@ -43,3 +47,4 @@ jobs:
           name: KAPETZ-AI-debug-APK
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+          
