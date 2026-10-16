@@ -30,6 +30,8 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          accept-android-sdk-licenses: false
 
       - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses
@@ -46,3 +48,4 @@ jobs:
           name: KAPETZ-AI-debug-APK
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+          
